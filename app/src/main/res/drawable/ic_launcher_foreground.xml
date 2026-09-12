@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Barber Shears Left Blade -->
+    <path
+        android:pathData="M38,30 L54,54 L50,56 L33,32 Z"
+        android:fillColor="#E0B06D" />
+    <!-- Barber Shears Right Blade -->
+    <path
+        android:pathData="M70,30 L54,54 L58,56 L75,32 Z"
+        android:fillColor="#C8964F" />
+    <!-- Barber Shears Left Finger Ring -->
+    <path
+        android:pathData="M38,76 A7,7 0 1 0 38,62 A7,7 0 1 0 38,76 M38,72 A3,3 0 1 1 38,66 A3,3 0 1 1 38,72"
+        android:fillColor="#E0B06D" />
+    <path
+        android:pathData="M42,65 L52,54 L55,56 L45,67 Z"
+        android:fillColor="#C8964F" />
+    <!-- Barber Shears Right Finger Ring -->
+    <path
+        android:pathData="M70,76 A7,7 0 1 0 70,62 A7,7 0 1 0 70,76 M70,72 A3,3 0 1 1 70,66 A3,3 0 1 1 70,72"
+        android:fillColor="#E0B06D" />
+    <path
+        android:pathData="M66,65 L56,54 L53,56 L63,67 Z"
+        android:fillColor="#C8964F" />
+    <!-- Central Pivot Screw -->
+    <path
+        android:pathData="M54,54 A3,3 0 1 0 54,48 A3,3 0 1 0 54,54"
+        android:fillColor="#A13A2E" />
+
+    <!-- Barber Pole Center Badge -->
+    <!-- Top and Bottom Brass Caps -->
+    <path
+        android:pathData="M48,34 L60,34 L58,38 L50,38 Z"
+        android:fillColor="#E0B06D" />
+    <path
+        android:pathData="M48,68 L60,68 L58,64 L50,64 Z"
+        android:fillColor="#E0B06D" />
+    <path
+        android:pathData="M50,38 L58,38 L58,64 L50,64 Z"
+        android:fillColor="#EFE9DD" />
+    <!-- Red and Steel Diagonal Stripes -->
+    <path
+        android:pathData="M50,40 L58,46 L58,50 L50,44 Z"
+        android:fillColor="#A13A2E" />
+    <path
+        android:pathData="M50,52 L58,58 L58,62 L50,56 Z"
+        android:fillColor="#4A5B63" />
+    <path
+        android:pathData="M54,32 A2.5,2.5 0 1 0 54,27 A2.5,2.5 0 1 0 54,32"
+        android:fillColor="#E0B06D" />
+    <path
+        android:pathData="M54,73 A2.5,2.5 0 1 0 54,68 A2.5,2.5 0 1 0 54,73"
+        android:fillColor="#C8964F" />
+
+    <!-- Five Star emblem at bottom -->
+    <path
+        android:pathData="M54,80 L55.3,83.5 L59,83.7 L56,86 L57.2,89.5 L54,87.3 L50.8,89.5 L52,86 L49,83.7 L52.7,83.5 Z"
+        android:fillColor="#E0B06D" />
+</vector>
+

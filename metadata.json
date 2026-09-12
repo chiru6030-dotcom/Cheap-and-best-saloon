@@ -1,0 +1,7 @@
+{
+  "name": "Cheap & Best",
+  "description": "Men's Salon in Bogadi 2nd Stage, Mysuru. Sharp cuts, fair prices, appointments, and grooming.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
