@@ -43,6 +43,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.PhoneAndroid
+import androidx.compose.material.icons.filled.RocketLaunch
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import com.example.components.AppointmentsDialog
 import com.example.components.BarberPoleStripeRule
 import com.example.components.BarbersSection
@@ -50,14 +67,20 @@ import com.example.components.BookingModalDialog
 import com.example.components.FinalCtaSection
 import com.example.components.HeroSection
 import com.example.components.LocationSection
+import com.example.components.PublishGuideDialog
 import com.example.components.ReviewsSection
 import com.example.components.SalonFooter
 import com.example.components.SalonNavBar
 import com.example.components.SalonSection
 import com.example.components.ServicesSection
 import com.example.components.TrustStrip
+import com.example.components.WebsiteWebView
 import com.example.components.WriteReviewDialog
 import com.example.data.SalonData
+import com.example.ui.theme.SalonBrassBright
+import com.example.ui.theme.SalonInkSoft
+import com.example.ui.theme.SalonPaper
+import com.example.ui.theme.SalonPaperDim
 import com.example.ui.theme.CheapAndBestTheme
 import com.example.ui.theme.SalonBrass
 import com.example.ui.theme.SalonInk
@@ -92,6 +115,9 @@ fun SalonApp(viewModel: SalonViewModel = viewModel()) {
   val isAppointmentsOpen by viewModel.isAppointmentsDialogOpen.collectAsState()
   val selectedService by viewModel.selectedService.collectAsState()
   val selectedBarber by viewModel.selectedBarber.collectAsState()
+
+  val isWebsiteMode = remember { mutableStateOf(false) }
+  val showPublishGuide = remember { mutableStateOf(false) }
 
   // Helper Intent Handlers
   fun dialSalonPhone() {
@@ -183,68 +209,165 @@ fun SalonApp(viewModel: SalonViewModel = viewModel()) {
     modifier = Modifier.fillMaxSize(),
     containerColor = SalonInk,
     topBar = {
-      SalonNavBar(
-        activeSection = activeSection,
-        onSectionSelected = { section -> scrollToSection(section) },
-        onCallNow = { dialSalonPhone() }
-      )
+      Column {
+        // Mode Switcher & Publish Guide Banner
+        Row(
+          modifier = Modifier
+            .fillMaxWidth()
+            .background(SalonInkSoft)
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            ElevatedFilterChip(
+              selected = isWebsiteMode.value,
+              onClick = { isWebsiteMode.value = true },
+              label = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                  Icon(
+                    imageVector = Icons.Default.Language,
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp)
+                  )
+                  Spacer(modifier = Modifier.width(4.dp))
+                  Text(
+                    text = "Web Site",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
+                  )
+                }
+              },
+              colors = FilterChipDefaults.elevatedFilterChipColors(
+                selectedContainerColor = SalonBrass,
+                selectedLabelColor = SalonInk,
+                selectedLeadingIconColor = SalonInk,
+                containerColor = SalonInk,
+                labelColor = SalonPaperDim
+              ),
+              modifier = Modifier.testTag("tab_website_mode")
+            )
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            ElevatedFilterChip(
+              selected = !isWebsiteMode.value,
+              onClick = { isWebsiteMode.value = false },
+              label = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                  Icon(
+                    imageVector = Icons.Default.PhoneAndroid,
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp)
+                  )
+                  Spacer(modifier = Modifier.width(4.dp))
+                  Text(
+                    text = "App Mode",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
+                  )
+                }
+              },
+              colors = FilterChipDefaults.elevatedFilterChipColors(
+                selectedContainerColor = SalonBrass,
+                selectedLabelColor = SalonInk,
+                selectedLeadingIconColor = SalonInk,
+                containerColor = SalonInk,
+                labelColor = SalonPaperDim
+              ),
+              modifier = Modifier.testTag("tab_native_mode")
+            )
+          }
+
+          OutlinedButton(
+            onClick = { showPublishGuide.value = true },
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = SalonBrassBright),
+            modifier = Modifier
+              .height(32.dp)
+              .testTag("btn_open_publish_guide")
+          ) {
+            Icon(
+              imageVector = Icons.Default.RocketLaunch,
+              contentDescription = null,
+              tint = SalonBrassBright,
+              modifier = Modifier.size(13.dp)
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+              text = "How to Publish",
+              fontSize = 10.sp,
+              fontWeight = FontWeight.Bold
+            )
+          }
+        }
+
+        if (!isWebsiteMode.value) {
+          SalonNavBar(
+            activeSection = activeSection,
+            onSectionSelected = { section -> scrollToSection(section) },
+            onCallNow = { dialSalonPhone() }
+          )
+        }
+      }
     },
     snackbarHost = {
       SnackbarHost(hostState = snackbarHostState)
     },
     floatingActionButton = {
-      ExtendedFloatingActionButton(
-        onClick = {
-          if (appointments.isNotEmpty()) {
-            viewModel.openAppointmentsDialog()
-          } else {
-            viewModel.openBooking()
-          }
-        },
-        containerColor = SalonBrass,
-        contentColor = SalonInk,
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.testTag("fab_booking_action")
-      ) {
-        if (appointments.isNotEmpty()) {
-          BadgedBox(
-            badge = {
-              Badge(containerColor = SalonRed) {
-                Text(
-                  text = "${appointments.size}",
-                  color = Color.White,
-                  fontSize = 11.sp,
-                  fontWeight = FontWeight.Bold
-                )
-              }
+      if (!isWebsiteMode.value) {
+        ExtendedFloatingActionButton(
+          onClick = {
+            if (appointments.isNotEmpty()) {
+              viewModel.openAppointmentsDialog()
+            } else {
+              viewModel.openBooking()
             }
-          ) {
+          },
+          containerColor = SalonBrass,
+          contentColor = SalonInk,
+          shape = RoundedCornerShape(8.dp),
+          modifier = Modifier.testTag("fab_booking_action")
+        ) {
+          if (appointments.isNotEmpty()) {
+            BadgedBox(
+              badge = {
+                Badge(containerColor = SalonRed) {
+                  Text(
+                    text = "${appointments.size}",
+                    color = Color.White,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
+                  )
+                }
+              }
+            ) {
+              Icon(
+                imageVector = Icons.Default.CalendarMonth,
+                contentDescription = "My Appointments",
+                tint = SalonInk,
+                modifier = Modifier.size(20.dp)
+              )
+            }
+            Text(
+              text = "  MY BOOKINGS (${appointments.size})",
+              fontWeight = FontWeight.Bold,
+              fontSize = 12.sp,
+              letterSpacing = 0.5.sp
+            )
+          } else {
             Icon(
               imageVector = Icons.Default.CalendarMonth,
-              contentDescription = "My Appointments",
+              contentDescription = "Book Appointment",
               tint = SalonInk,
               modifier = Modifier.size(20.dp)
             )
+            Text(
+              text = "  RESERVE CHAIR",
+              fontWeight = FontWeight.Bold,
+              fontSize = 12.sp,
+              letterSpacing = 0.5.sp
+            )
           }
-          Text(
-            text = "  MY BOOKINGS (${appointments.size})",
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
-            letterSpacing = 0.5.sp
-          )
-        } else {
-          Icon(
-            imageVector = Icons.Default.CalendarMonth,
-            contentDescription = "Book Appointment",
-            tint = SalonInk,
-            modifier = Modifier.size(20.dp)
-          )
-          Text(
-            text = "  RESERVE CHAIR",
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
-            letterSpacing = 0.5.sp
-          )
         }
       }
     }
@@ -255,97 +378,107 @@ fun SalonApp(viewModel: SalonViewModel = viewModel()) {
         .background(SalonInk)
         .padding(innerPadding)
     ) {
-      LazyColumn(
-        state = listState,
-        modifier = Modifier
-          .fillMaxSize()
-          .testTag("main_salon_scroll_list")
-      ) {
-        // Item 0: Hero Section
-        item(key = "hero") {
-          HeroSection(
-            onBookAppointment = { viewModel.openBooking() },
-            onWhatsAppDirect = { openWhatsApp("Hi, I'd like to book an appointment at Cheap and Best Men's Salon, Bogadi 2nd Stage") },
-            onCallNow = { dialSalonPhone() },
-            onGetDirections = { openGoogleMaps() }
-          )
-        }
+      if (isWebsiteMode.value) {
+        WebsiteWebView()
+      } else {
+        LazyColumn(
+          state = listState,
+          modifier = Modifier
+            .fillMaxSize()
+            .testTag("main_salon_scroll_list")
+        ) {
+          // Item 0: Hero Section
+          item(key = "hero") {
+            HeroSection(
+              onBookAppointment = { viewModel.openBooking() },
+              onWhatsAppDirect = { openWhatsApp("Hi, I'd like to book an appointment at Cheap and Best Men's Salon, Bogadi 2nd Stage") },
+              onCallNow = { dialSalonPhone() },
+              onGetDirections = { openGoogleMaps() }
+            )
+          }
 
-        // Item 1: Barber Stripe Rule
-        item(key = "stripe_rule_1") {
-          BarberPoleStripeRule()
-        }
+          // Item 1: Barber Stripe Rule
+          item(key = "stripe_rule_1") {
+            BarberPoleStripeRule()
+          }
 
-        // Item 2: Trust Strip
-        item(key = "trust_strip") {
-          TrustStrip()
-        }
+          // Item 2: Trust Strip
+          item(key = "trust_strip") {
+            TrustStrip()
+          }
 
-        // Item 3: Services Section
-        item(key = "services") {
-          ServicesSection(
-            onSelectServiceForBooking = { service ->
-              viewModel.openBooking(service = service)
-            }
-          )
-        }
+          // Item 3: Services Section
+          item(key = "services") {
+            ServicesSection(
+              onSelectServiceForBooking = { service ->
+                viewModel.openBooking(service = service)
+              }
+            )
+          }
 
-        // Item 4: Barber Stripe Rule
-        item(key = "stripe_rule_2") {
-          BarberPoleStripeRule()
-        }
+          // Item 4: Barber Stripe Rule
+          item(key = "stripe_rule_2") {
+            BarberPoleStripeRule()
+          }
 
-        // Item 5: Barbers Section
-        item(key = "barbers") {
-          BarbersSection(
-            onSelectBarberForBooking = { barber ->
-              viewModel.openBooking(barber = barber)
-            }
-          )
-        }
+          // Item 5: Barbers Section
+          item(key = "barbers") {
+            BarbersSection(
+              onSelectBarberForBooking = { barber ->
+                viewModel.openBooking(barber = barber)
+              }
+            )
+          }
 
-        // Item 6: Reviews Section
-        item(key = "reviews") {
-          ReviewsSection(
-            reviews = reviews,
-            onOpenWriteReview = { viewModel.openReviewDialog() }
-          )
-        }
+          // Item 6: Reviews Section
+          item(key = "reviews") {
+            ReviewsSection(
+              reviews = reviews,
+              onOpenWriteReview = { viewModel.openReviewDialog() }
+            )
+          }
 
-        // Item 7: Barber Stripe Rule
-        item(key = "stripe_rule_3") {
-          BarberPoleStripeRule()
-        }
+          // Item 7: Barber Stripe Rule
+          item(key = "stripe_rule_3") {
+            BarberPoleStripeRule()
+          }
 
-        // Item 8: Location Section
-        item(key = "location") {
-          LocationSection(
-            onOpenMap = { openGoogleMaps() },
-            onCallPhone = { dialSalonPhone() },
-            onCopyAddress = { copyAddressToClipboard() }
-          )
-        }
+          // Item 8: Location Section
+          item(key = "location") {
+            LocationSection(
+              onOpenMap = { openGoogleMaps() },
+              onCallPhone = { dialSalonPhone() },
+              onCopyAddress = { copyAddressToClipboard() }
+            )
+          }
 
-        // Item 9: Final CTA Section
-        item(key = "final_cta") {
-          FinalCtaSection(
-            onBookWhatsApp = { openWhatsApp("Hi Cheap and Best, I'd like to book a chair today at Bogadi 2nd Stage") },
-            onCallSalon = { dialSalonPhone() }
-          )
-        }
+          // Item 9: Final CTA Section
+          item(key = "final_cta") {
+            FinalCtaSection(
+              onBookWhatsApp = { openWhatsApp("Hi Cheap and Best, I'd like to book a chair today at Bogadi 2nd Stage") },
+              onCallSalon = { dialSalonPhone() }
+            )
+          }
 
-        // Item 10: Comprehensive Footer (Responsive navigation, Social links, Contact info, Copyright updates)
-        item(key = "footer") {
-          SalonFooter(
-            onNavigateSection = { section -> scrollToSection(section) },
-            onOpenSocialLink = { social -> openSocialWebLink(social.url) },
-            onCallPhone = { dialSalonPhone() },
-            onOpenWhatsApp = { openWhatsApp("Hi, inquiring from Cheap and Best app") },
-            onOpenMap = { openGoogleMaps() }
-          )
+          // Item 10: Comprehensive Footer (Responsive navigation, Social links, Contact info, Copyright updates)
+          item(key = "footer") {
+            SalonFooter(
+              onNavigateSection = { section -> scrollToSection(section) },
+              onOpenSocialLink = { social -> openSocialWebLink(social.url) },
+              onCallPhone = { dialSalonPhone() },
+              onOpenWhatsApp = { openWhatsApp("Hi, inquiring from Cheap and Best app") },
+              onOpenMap = { openGoogleMaps() }
+            )
+          }
         }
       }
     }
+  }
+
+  if (showPublishGuide.value) {
+    PublishGuideDialog(
+      onDismiss = { showPublishGuide.value = false }
+    )
   }
 
   // Dialogs
