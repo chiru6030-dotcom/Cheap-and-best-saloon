@@ -74,7 +74,7 @@ object SalonData {
       number = "01",
       title = "Haircuts",
       description = "Classic and modern styles, clipper or scissor work, finished with a proper clean-up around the neck and ears.",
-      price = "₹150",
+      price = "₹100",
       duration = "30 mins",
       iconName = "scissors"
     ),
@@ -83,7 +83,7 @@ object SalonData {
       number = "02",
       title = "Beard styling",
       description = "Shaping, trimming and line-ups that hold their edge, from a light tidy-up to a full redesign.",
-      price = "₹100",
+      price = "₹50",
       duration = "20 mins",
       iconName = "beard"
     ),
@@ -92,7 +92,7 @@ object SalonData {
       number = "03",
       title = "Wash & grooming",
       description = "Hair wash and cleansing service customers specifically call out as gentle and thorough — not rushed.",
-      price = "₹120",
+      price = "₹70",
       duration = "25 mins",
       iconName = "wash"
     ),
@@ -101,7 +101,7 @@ object SalonData {
       number = "04",
       title = "Bridal & wedding styling",
       description = "Groom-day grooming packages — the shop customers now specifically recommend for weddings.",
-      price = "₹499",
+      price = "₹449",
       duration = "60 mins",
       iconName = "wedding"
     ),
@@ -110,7 +110,7 @@ object SalonData {
       number = "05",
       title = "Head Massage & Oil Treatment",
       description = "Deep soothing scalp relaxation with nourishing Ayurvedic herbal oil to relieve tension and stress.",
-      price = "₹200",
+      price = "₹150",
       duration = "30 mins",
       iconName = "spa"
     ),
@@ -119,7 +119,7 @@ object SalonData {
       number = "06",
       title = "Royal Hot Towel Shave",
       description = "Warm lather, precision straight-blade shave, aromatic hot towel compress, and calming aftershave balm.",
-      price = "₹130",
+      price = "₹80",
       duration = "25 mins",
       iconName = "shave"
     )
